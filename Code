@@ -1,0 +1,42 @@
+import os
+from os import path 
+import shutil 
+
+# Folder path you want to organize
+FOLDER_PATH = os.getcwd()  # Current working directory
+
+# File type Mappings
+FILE_TYPES = {
+    'Images': ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'],
+    'Documents': ['.pdf', '.docx', '.doc', '.txt', '.xlsx', '.pptx', '.md', '.csv'],
+    'Audio': ['.mp3', '.wav', '.aac', '.flac'],
+    'Videos': ['.mp4', '.mkv', '.avi', '.mov'],
+    'Archives': ['.zip', '.rar', '.tar.gz', '.7z'],
+    'Scripts': ['.js', '.html', '.css'],
+    'Others': []  # For files that don't match any category
+}
+
+# Create Folders if they don't exist
+for folder in FILE_TYPES.keys(): # make sure to create folders for each file type category
+    folder_path = os.path.join(FOLDER_PATH, folder) 
+    if not os.path.exists(folder_path): 
+        os.makedirs(folder_path)
+
+# Organize Files
+for file in os.listdir(FOLDER_PATH):
+    file_path = os.path.join(FOLDER_PATH, file)
+    
+    # Skip folders
+    if os.path.isdir(file_path):
+        continue
+
+    # Get file extension
+    # print(path.splitext(file))
+    file_extension = os.path.splitext(file)[1].lower()
+
+    for folder, extensions in FILE_TYPES.items():
+        if file_extension in extensions:
+            shutil.move(file_path, os.path.join(FOLDER_PATH, folder, file))
+            break
+
+print("Files have been organized successfully.")
